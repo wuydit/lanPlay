@@ -1,0 +1,43 @@
+spring:
+  autoconfigure:
+    exclude: com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
+  datasource:
+    druid:
+      stat-view-servlet:
+        loginUsername: admin
+        loginPassword: 123456
+    dynamic:
+      primary: Oracle-1
+      p6spy: true # 默认false,建议线上关闭。
+      druid: #以下是全局默认值，可以全局更改
+        minIdle: 5
+        maxActive: 20
+        filters: stat,wall # 注意这个值和druid原生不一致，默认启动了stat,wall
+        stat:
+          merge-sql: false
+          log-slow-sql: true
+      datasource:
+        BusinessLog:
+          username: root
+          password:
+          driver-class-name: com.mysql.jdbc.Driver
+          url: jdbc:mysql://182.92.112.233:3306/lanplay?characterEncoding=utf8&useSSL=true
+server:
+  port: 80
+  servlet:
+    context-path: /
+logging:
+  level:
+    org.wyw.lanplay: info
+    root: info
+  file:
+    total-size-cap: 2GB
+    name: ${logging.file.path}/lanplay.log
+    path: logs
+    max-size: 10MB
+    max-history: 30
+  pattern:
+    rolling-file-name: ${logging.file.path}/lanplay.%d{yyyy-MM-dd}-%i.log
+mybatis-plus:
+  global-config:
+    banner: false
