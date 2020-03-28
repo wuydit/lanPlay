@@ -2,15 +2,13 @@ package org.wyw.lanplay.controller;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import org.springframework.stereotype.Controller;
 import org.wyw.lanplay.aop.Log;
 import org.wyw.lanplay.entity.ServerRecordEntity;
 import org.wyw.lanplay.service.ServerRecordService;
-
 import java.util.List;
 
 /**
@@ -21,7 +19,8 @@ import java.util.List;
  * @author wuYd
  * @since 2020-03-24
  */
-@Controller
+@Api
+@RestController
 @RequestMapping("/")
 public class ServerRecordController {
 

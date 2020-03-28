@@ -80,7 +80,7 @@ public class LogAspect {
                 if (tmpCs.length == arguments.length) {
                     Log methodCache = m.getAnnotation(Log.class);
                     if (methodCache != null) {
-                        methode = methodCache.description();
+                        methode = methodCache.desc();
                     }
                     break;
                 }

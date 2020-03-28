@@ -39,6 +39,9 @@ public class UserRecordEntity extends Model<UserRecordEntity> {
     @TableField("username")
     private String username;
 
+    /**
+     * 存为加密后密码
+     */
     @TableField("password")
     private String password;
 
@@ -51,8 +54,8 @@ public class UserRecordEntity extends Model<UserRecordEntity> {
     @TableField("createAt")
     private LocalDateTime createAt;
 
-    @TableField("is_del")
-    private Boolean isDel;
+    @TableField("status")
+    private Integer status;
 
 
     @Override
