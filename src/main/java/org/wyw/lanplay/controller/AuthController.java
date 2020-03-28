@@ -47,7 +47,9 @@ public class AuthController {
         if(ObjectUtils.isEmpty(userEntity)){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("用户未找到");
         }
-        if(StringUtils.equals(userEntity.getPassword(), commonService.encryptedPwd(username, pwd))){
+        if(StringUtils.equals(
+                commonService.encryptedPwd(username, userEntity.getPassword()),
+                commonService.encryptedPwd(username, pwd))){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("账号或密码不正确");
         }
         if(userEntity.getStatus() == 1){

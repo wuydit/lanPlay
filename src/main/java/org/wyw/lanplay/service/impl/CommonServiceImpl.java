@@ -7,6 +7,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
@@ -70,8 +71,8 @@ public class CommonServiceImpl implements CommonService {
         DecodedJWT jwt = verifier.verify(token);
         Map<String, Claim> claims = jwt.getClaims();
         Claim claim = claims.get("id");
-        if(StringUtils.isNotEmpty(claim.toString())){
-            return userRecordService.getById(claim.toString());
+        if(ObjectUtils.isNotEmpty(claim.asLong())){
+            return userRecordService.getById(claim.asLong());
         }
         return null;
     }

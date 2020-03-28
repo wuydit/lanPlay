@@ -39,14 +39,16 @@ public class AuthorityInterceptor extends HandlerInterceptorAdapter {
         LoginUserRequired loginUserRequired = method.getAnnotation(LoginUserRequired.class);
 
         String token = request.getHeader("token");
-        if(token == null){
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            response.getWriter().print("token not find");
-            return false;
-        }
+
 
         if (methodAnnotation != null) {
 
+            if(token == null){
+                response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                response.getWriter().print("token not find");
+                return false;
+            }
+
             UserRecordEntity userRecordEntity = commonService.verifyAdmin(token);
             if(ObjectUtils.isEmpty(userRecordEntity) || userRecordEntity.getStatus() != 0){
                 response.setStatus(HttpStatus.UNAUTHORIZED.value());
@@ -54,28 +56,33 @@ public class AuthorityInterceptor extends HandlerInterceptorAdapter {
                 return false;
             }
 
-            if(StringUtils.contains(userRecordEntity.getIdentity(),"ADMIN")){
+            if(!StringUtils.containsAny(userRecordEntity.getIdentity(),"ADMIN")){
                 response.setStatus(HttpStatus.UNAUTHORIZED.value());
                 response.getWriter().print("权限不足");
                 return false;
             }
-            return true;
         }
 
         if (loginUserRequired != null) {
-            UserRecordEntity userRecordEntity = commonService.verifyAdmin(token);
+
+            if(token == null){
+                response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                response.getWriter().print("token not find");
+                return false;
+            }
+            UserRecordEntity userRecordEntity = commonService.verifyUser(token);
             if(ObjectUtils.isEmpty(userRecordEntity) || userRecordEntity.getStatus() != 0){
                 response.setStatus(HttpStatus.UNAUTHORIZED.value());
                 response.getWriter().print("token not find");
                 return false;
             }
-            if(StringUtils.contains(userRecordEntity.getIdentity(),"USER")){
+            if(!StringUtils.containsAny(userRecordEntity.getIdentity(),"USER")){
                 response.setStatus(HttpStatus.UNAUTHORIZED.value());
                 response.getWriter().print("权限不足");
                 return false;
             }
-            return true;
         }
-        return false;
+
+        return true;
     }
 }

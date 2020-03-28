@@ -6,6 +6,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.wyw.lanplay.annotation.LoginAdminRequired;
 import org.wyw.lanplay.aop.Log;
 import org.wyw.lanplay.entity.ServerRecordEntity;
 import org.wyw.lanplay.service.ServerRecordService;
@@ -33,6 +34,7 @@ public class ServerRecordController {
     @Log(desc = "服务器列表")
     @GetMapping("server")
     @ApiOperation("申请服务器列表")
+    @LoginAdminRequired
     public ResponseEntity<List<ServerRecordEntity>> list(){
         return ResponseEntity.ok(serverRecordService.list());
     }
@@ -40,6 +42,7 @@ public class ServerRecordController {
     @Log(desc = "服务器分页")
     @GetMapping("serverPage")
     @ApiOperation("申请服务器分页")
+    @LoginAdminRequired
     public ResponseEntity<Page<ServerRecordEntity>> page(@RequestParam(value = "size", defaultValue = "20") Integer size,
                                                               @RequestParam(value = "current", defaultValue = "1") Integer current){
         return ResponseEntity.ok(serverRecordService.page(new Page<>(current, size)));
@@ -48,6 +51,7 @@ public class ServerRecordController {
     @Log(desc = "服务器添加")
     @PostMapping("server")
     @ApiOperation("服务器添加")
+    @LoginAdminRequired
     public ResponseEntity applyServer(@RequestBody ServerRecordEntity serverRecordEntity){
         return ResponseEntity.ok(serverRecordService.save(serverRecordEntity));
     }
@@ -55,6 +59,7 @@ public class ServerRecordController {
     @Log(desc = "服务器修改")
     @PutMapping("server")
     @ApiOperation("服务器修改")
+    @LoginAdminRequired
     public ResponseEntity updateServer(@RequestBody ServerRecordEntity serverRecordEntity){
         return ResponseEntity.ok(serverRecordService.updateById(serverRecordEntity));
     }
@@ -62,6 +67,7 @@ public class ServerRecordController {
     @Log(desc = "服务器获取")
     @GetMapping("server/{id}")
     @ApiOperation("服务器获取")
+    @LoginAdminRequired
     public ResponseEntity applyServer(@PathVariable("id") Long id){
         return ResponseEntity.ok(serverRecordService.getById(id));
     }
@@ -69,6 +75,7 @@ public class ServerRecordController {
     @Log(desc = "服务器删除")
     @DeleteMapping("server/{id}")
     @ApiOperation("服务器删除")
+    @LoginAdminRequired
     public ResponseEntity deleteServer(@PathVariable("id") Long id){
         return ResponseEntity.ok(serverRecordService.removeById(id));
     }

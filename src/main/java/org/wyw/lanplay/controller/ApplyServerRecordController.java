@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
+import org.wyw.lanplay.annotation.LoginAdminRequired;
+import org.wyw.lanplay.annotation.LoginUserRequired;
 import org.wyw.lanplay.aop.Log;
 import org.wyw.lanplay.entity.ApplyServerRecordEntity;
 import org.wyw.lanplay.service.ApplyServerRecordService;
@@ -38,6 +40,7 @@ public class ApplyServerRecordController {
     @Log(desc = "申请服务器列表")
     @GetMapping("applyServer")
     @ApiOperation("申请服务器列表")
+    @LoginAdminRequired
     public ResponseEntity<List<ApplyServerRecordEntity>> list(){
         return ResponseEntity.ok(applyServerRecordService.list());
     }
@@ -45,6 +48,7 @@ public class ApplyServerRecordController {
     @Log(desc = "申请服务器分页")
     @GetMapping("applyServerPage")
     @ApiOperation("申请服务器分页")
+    @LoginAdminRequired
     public ResponseEntity<Page<ApplyServerRecordEntity>> page(@RequestParam(value = "size", defaultValue = "20") Integer size,
                                                               @RequestParam(value = "current", defaultValue = "1") Integer current){
         return ResponseEntity.ok(applyServerRecordService.page(new Page<>(current, size)));
@@ -53,6 +57,7 @@ public class ApplyServerRecordController {
     @Log(desc = "申请服务器")
     @PostMapping("applyServer")
     @ApiOperation("申请服务器")
+    @LoginUserRequired
     public ResponseEntity applyServer(@RequestBody ApplyServerRecordEntity applyServerRecordEntity){
         return ResponseEntity.ok(applyServerRecordService.save(applyServerRecordEntity));
     }
@@ -60,6 +65,7 @@ public class ApplyServerRecordController {
     @Log(desc = "申请服务器")
     @PutMapping("applyServer")
     @ApiOperation("申请服务器")
+    @LoginAdminRequired
     public ResponseEntity updateServer(@RequestBody ApplyServerRecordEntity applyServerRecordEntity){
         return ResponseEntity.ok(applyServerRecordService.updateById(applyServerRecordEntity));
     }
@@ -67,6 +73,7 @@ public class ApplyServerRecordController {
     @Log(desc = "申请服务器")
     @GetMapping("applyServer/{id}")
     @ApiOperation("申请服务器")
+    @LoginAdminRequired
     public ResponseEntity applyServer(@PathVariable("id") Long id){
         return ResponseEntity.ok(applyServerRecordService.getById(id));
     }
@@ -74,6 +81,7 @@ public class ApplyServerRecordController {
     @Log(desc = "申请服务器删除")
     @DeleteMapping("applyServer/{id}")
     @ApiOperation("申请服务器删除")
+    @LoginAdminRequired
     public ResponseEntity deleteApplyServer(@PathVariable("id") Long id){
         return ResponseEntity.ok(applyServerRecordService.removeById(id));
     }

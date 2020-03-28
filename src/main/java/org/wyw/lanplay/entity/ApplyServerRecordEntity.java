@@ -54,6 +54,12 @@ public class ApplyServerRecordEntity extends Model<ApplyServerRecordEntity> {
     @TableField("is_del")
     private Boolean isDel;
 
+    @TableField("is_public")
+    private Boolean isPublic;
+
+    @TableField("password")
+    private String serverPwd;
+
 
     @Override
     protected Serializable pkVal() {

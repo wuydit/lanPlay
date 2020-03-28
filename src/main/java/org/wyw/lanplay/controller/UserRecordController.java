@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
+import org.wyw.lanplay.annotation.LoginAdminRequired;
 import org.wyw.lanplay.aop.Log;
 import org.wyw.lanplay.entity.ServerRecordEntity;
 import org.wyw.lanplay.entity.UserRecordEntity;
@@ -23,8 +24,8 @@ import java.util.List;
  * @author wuYd
  * @since 2020-03-24
  */
-@Controller
-@RequestMapping("/user-record-entity")
+@RestController
+@RequestMapping("/userRecord")
 public class UserRecordController {
 
 
@@ -37,6 +38,7 @@ public class UserRecordController {
     @Log(desc = "用户列表")
     @GetMapping("user")
     @ApiOperation("用户列表")
+    @LoginAdminRequired
     public ResponseEntity<List<UserRecordEntity>> list(){
         return ResponseEntity.ok(userRecordService.list());
     }
@@ -44,6 +46,7 @@ public class UserRecordController {
     @Log(desc = "用户分页")
     @GetMapping("userPage")
     @ApiOperation("用户分页")
+    @LoginAdminRequired
     public ResponseEntity<Page<UserRecordEntity>> userPage(@RequestParam(value = "size", defaultValue = "20") Integer size,
                                                          @RequestParam(value = "current", defaultValue = "1") Integer current){
         return ResponseEntity.ok(userRecordService.page(new Page<>(current, size)));
@@ -52,6 +55,7 @@ public class UserRecordController {
     @Log(desc = "用户添加")
     @PostMapping("user")
     @ApiOperation("用户添加")
+    @LoginAdminRequired
     public ResponseEntity addUser(@RequestBody UserRecordEntity userRecordEntity){
         return ResponseEntity.ok(userRecordService.save(userRecordEntity));
     }
@@ -59,6 +63,7 @@ public class UserRecordController {
     @Log(desc = "用户修改")
     @PutMapping("user")
     @ApiOperation("用户修改")
+    @LoginAdminRequired
     public ResponseEntity updateUser(@RequestBody UserRecordEntity userRecordEntity){
         return ResponseEntity.ok(userRecordService.updateById(userRecordEntity));
     }
@@ -66,6 +71,7 @@ public class UserRecordController {
     @Log(desc = "用户获取")
     @GetMapping("user/{id}")
     @ApiOperation("用户获取")
+    @LoginAdminRequired
     public ResponseEntity user(@PathVariable("id") Long id){
         return ResponseEntity.ok(userRecordService.getById(id));
     }
@@ -73,6 +79,7 @@ public class UserRecordController {
     @Log(desc = "用户获取")
     @DeleteMapping("user/{id}")
     @ApiOperation("用户获取")
+    @LoginAdminRequired
     public ResponseEntity applyServer(@PathVariable("id") Long id){
         return ResponseEntity.ok(userRecordService.removeById(id));
     }
