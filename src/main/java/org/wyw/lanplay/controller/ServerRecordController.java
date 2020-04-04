@@ -55,6 +55,7 @@ public class ServerRecordController {
                 Wrappers.<ServerRecordEntity>lambdaQuery()
                         .select(ServerRecordEntity::getId,
                                 ServerRecordEntity::getMaxPeople,
+                                ServerRecordEntity::getImgUrl,
                                 ServerRecordEntity::getName,
                                 ServerRecordEntity::getNode,
                                 ServerRecordEntity::getUserId

@@ -14,8 +14,4 @@ public class MsgDTO implements Serializable {
     private String msg;
 
     private String token;
-
-    public SendMsgDTO sendMsgDTO(){
-        return new SendMsgDTO(userId, msg);
-    }
 }

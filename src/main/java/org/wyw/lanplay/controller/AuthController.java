@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.wyw.lanplay.aop.Log;
 import org.wyw.lanplay.dto.BaseEntity;
 import org.wyw.lanplay.dto.LoginDTO;
+import org.wyw.lanplay.dto.RegDTO;
 import org.wyw.lanplay.entity.InvitationCodeEntity;
 import org.wyw.lanplay.entity.UserRecordEntity;
 import org.wyw.lanplay.service.CommonService;
@@ -64,26 +65,21 @@ public class AuthController {
     @Log(desc = "注册")
     @PostMapping("reg")
     @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<BaseEntity> login(HttpServletRequest request,
-                                        @RequestParam("username")String username,
-                                        @RequestParam("password")String pwd,
-                                        @RequestParam("code")String code,
-                                        @RequestParam("nickname")String nickname,
-                                        @RequestParam("ip")String ip){
+    public ResponseEntity<BaseEntity> login(HttpServletRequest request, @RequestBody RegDTO regDTO){
         int codeCount = invitationCodeService.count(Wrappers.<InvitationCodeEntity>lambdaQuery()
-                .eq(InvitationCodeEntity::getCode, code));
+                .eq(InvitationCodeEntity::getCode, regDTO.getCode()));
         if(codeCount > 0){
             UserRecordEntity userRecordEntity = new UserRecordEntity();
             userRecordEntity.setCreateAt(LocalDateTime.now());
             userRecordEntity.setIdentity("USER");
-            userRecordEntity.setIp(ip);
-            userRecordEntity.setNickname(nickname);
-            userRecordEntity.setPassword(commonService.encryptedPwd(username,pwd));
-            userRecordEntity.setUsername(username);
+            userRecordEntity.setIp(regDTO.getIp());
+            userRecordEntity.setNickname(regDTO.getNickname());
+            userRecordEntity.setPassword(commonService.encryptedPwd(regDTO.getUsername(), regDTO.getPassword()));
+            userRecordEntity.setUsername(regDTO.getUsername());
             userRecordEntity.setStatus(0);
             if(userRecordService.save(userRecordEntity)){
                 invitationCodeService.remove(Wrappers.<InvitationCodeEntity>
-                        lambdaQuery().eq(InvitationCodeEntity::getCode, code));
+                        lambdaQuery().eq(InvitationCodeEntity::getCode, regDTO.getCode()));
                 return ResponseEntity.ok(BaseEntity.ok(commonService.createToken(userRecordEntity)));
             }
         }else {
