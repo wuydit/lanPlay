@@ -10,9 +10,12 @@ import org.springframework.web.bind.annotation.*;
 import org.wyw.lanplay.annotation.LoginAdminRequired;
 import org.wyw.lanplay.annotation.LoginUserRequired;
 import org.wyw.lanplay.aop.Log;
+import org.wyw.lanplay.dto.BaseEntity;
 import org.wyw.lanplay.entity.ServerRecordEntity;
 import org.wyw.lanplay.service.ServerRecordService;
 import java.util.List;
+
+import static org.wyw.lanplay.dto.ResultEnum.SUCCESS;
 
 /**
  * <p>
@@ -45,24 +48,25 @@ public class ServerRecordController {
     @GetMapping("serverPage")
     @ApiOperation("服务器分页")
     @LoginUserRequired
-    public ResponseEntity<Page<ServerRecordEntity>> page(@RequestParam(value = "size", defaultValue = "20") Integer size,
+    public ResponseEntity<BaseEntity<Page<ServerRecordEntity>>> page(@RequestParam(value = "size", defaultValue = "20") Integer size,
                                                          @RequestParam(value = "current", defaultValue = "1") Integer current){
-        return ResponseEntity.ok(serverRecordService.page(new Page<>(current, size),
+        return ResponseEntity.ok(new BaseEntity<>(SUCCESS,
+                serverRecordService.page(new Page<>(current, size),
                 Wrappers.<ServerRecordEntity>lambdaQuery()
                         .select(ServerRecordEntity::getId,
                                 ServerRecordEntity::getMaxPeople,
                                 ServerRecordEntity::getName,
                                 ServerRecordEntity::getNode,
                                 ServerRecordEntity::getUserId
-                        ).eq(ServerRecordEntity::getIsDel, Boolean.FALSE)));
+                        ).eq(ServerRecordEntity::getIsDel, Boolean.FALSE))));
     }
 
     @Log(desc = "服务器{User}")
     @GetMapping("server/{id}")
     @ApiOperation("服务器{User}")
     @LoginUserRequired
-    public ResponseEntity<ServerRecordEntity> server(@PathVariable String id){
-        return ResponseEntity.ok(serverRecordService.getById(id));
+    public ResponseEntity<BaseEntity<ServerRecordEntity>> server(@PathVariable String id){
+        return ResponseEntity.ok(new BaseEntity<>(serverRecordService.getById(id)));
     }
 //
 //    @Log(desc = "服务器添加")

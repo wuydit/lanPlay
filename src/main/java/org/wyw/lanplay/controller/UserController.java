@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.wyw.lanplay.annotation.LoginAdminRequired;
 import org.wyw.lanplay.annotation.LoginUserRequired;
 import org.wyw.lanplay.aop.Log;
+import org.wyw.lanplay.dto.BaseEntity;
 import org.wyw.lanplay.entity.ApplyServerRecordEntity;
 import org.wyw.lanplay.entity.UserRecordEntity;
 import org.wyw.lanplay.service.ApplyServerRecordService;
@@ -55,17 +56,17 @@ public class UserController {
         applyServerRecordEntity.setNode(node);
         applyServerRecordEntity.setIsPublic(isPub);
         applyServerRecordEntity.setServerPwd(pwd);
-        return ResponseEntity.ok(applyServerRecordService.save(applyServerRecordEntity));
+        return ResponseEntity.ok(BaseEntity.ok(applyServerRecordService.save(applyServerRecordEntity)));
     }
 
     @Log(desc = "获取用户信息")
     @GetMapping("user")
     @ApiOperation("获取用户信息")
     @LoginUserRequired
-    public ResponseEntity user(HttpServletRequest request){
+    public ResponseEntity<BaseEntity> user(HttpServletRequest request){
         UserRecordEntity userRecordEntity = commonService.verifyUser(request.getHeader("token"));
         userRecordEntity.setPassword("");
-        return ResponseEntity.ok(userRecordEntity);
+        return ResponseEntity.ok(BaseEntity.ok(userRecordEntity));
     }
 
 

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.wyw.lanplay.annotation.LoginAdminRequired;
 import org.wyw.lanplay.annotation.LoginUserRequired;
 import org.wyw.lanplay.aop.Log;
+import org.wyw.lanplay.dto.BaseEntity;
 import org.wyw.lanplay.entity.ApplyServerRecordEntity;
 import org.wyw.lanplay.service.ApplyServerRecordService;
 
@@ -58,8 +59,8 @@ public class ApplyServerRecordController {
     @PostMapping("applyServer")
     @ApiOperation("申请服务器")
     @LoginUserRequired
-    public ResponseEntity applyServer(@RequestBody ApplyServerRecordEntity applyServerRecordEntity){
-        return ResponseEntity.ok(applyServerRecordService.save(applyServerRecordEntity));
+    public ResponseEntity<BaseEntity> applyServer(@RequestBody ApplyServerRecordEntity applyServerRecordEntity){
+        return ResponseEntity.ok(new BaseEntity<>(applyServerRecordService.save(applyServerRecordEntity)));
     }
 
     @Log(desc = "申请服务器")

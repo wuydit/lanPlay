@@ -7,10 +7,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.wyw.lanplay.aop.Log;
+import org.wyw.lanplay.dto.BaseEntity;
+import org.wyw.lanplay.dto.LoginDTO;
 import org.wyw.lanplay.entity.InvitationCodeEntity;
 import org.wyw.lanplay.entity.UserRecordEntity;
 import org.wyw.lanplay.service.CommonService;
@@ -18,6 +18,8 @@ import org.wyw.lanplay.service.InvitationCodeService;
 import org.wyw.lanplay.service.UserRecordService;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+
+import static org.wyw.lanplay.dto.ResultEnum.*;
 
 @Api
 @RestController
@@ -38,31 +40,31 @@ public class AuthController {
         this.invitationCodeService = invitationCodeService;
     }
 
+    @Log(desc = "登录")
     @PostMapping("login")
-    public ResponseEntity<String> login(@RequestParam("username")String username,
-                                        @RequestParam("password")String pwd){
+    public ResponseEntity<BaseEntity> login(@RequestBody LoginDTO loginDTO){
         UserRecordEntity userEntity = userRecordService.getOne(
-                Wrappers.<UserRecordEntity>lambdaQuery().eq(UserRecordEntity::getUsername,username));
+                Wrappers.<UserRecordEntity>lambdaQuery().eq(UserRecordEntity::getUsername, loginDTO.getUsername()));
         if(ObjectUtils.isEmpty(userEntity)){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("用户未找到");
+            return ResponseEntity.ok(BaseEntity.status(USER_NOT_FIND));
         }
-        if(StringUtils.equals(
-                commonService.encryptedPwd(username, userEntity.getPassword()),
-                commonService.encryptedPwd(username, pwd))){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("账号或密码不正确");
+        String cryStr =  commonService.encryptedPwd(loginDTO.getUsername(), loginDTO.getPassword());
+        if(!StringUtils.equals(userEntity.getPassword(), cryStr)){
+            return ResponseEntity.ok(BaseEntity.status(USER_ACCOUNT_ERROR));
         }
         if(userEntity.getStatus() == 1){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("已封禁");
+            return ResponseEntity.ok(BaseEntity.status(USER_BAN));
         }
         if(userEntity.getStatus() == 2){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("已停用");
+            return ResponseEntity.ok(BaseEntity.status(USER_STOP));
         }
-        return ResponseEntity.ok(commonService.createToken(userEntity));
+        return ResponseEntity.ok(BaseEntity.ok(commonService.createToken(userEntity)));
     }
 
+    @Log(desc = "注册")
     @PostMapping("reg")
     @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<String> login(HttpServletRequest request,
+    public ResponseEntity<BaseEntity> login(HttpServletRequest request,
                                         @RequestParam("username")String username,
                                         @RequestParam("password")String pwd,
                                         @RequestParam("code")String code,
@@ -82,12 +84,11 @@ public class AuthController {
             if(userRecordService.save(userRecordEntity)){
                 invitationCodeService.remove(Wrappers.<InvitationCodeEntity>
                         lambdaQuery().eq(InvitationCodeEntity::getCode, code));
-                return ResponseEntity.ok(commonService.createToken(userRecordEntity));
+                return ResponseEntity.ok(BaseEntity.ok(commonService.createToken(userRecordEntity)));
             }
         }else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("注册码错误");
+            return ResponseEntity.ok(BaseEntity.status(USER_INVITATION_CODE_ERROR));
         }
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("未知错误");
+        return ResponseEntity.ok(BaseEntity.status(UNDEFINE));
     }
 }
