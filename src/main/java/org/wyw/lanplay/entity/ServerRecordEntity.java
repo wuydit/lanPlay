@@ -54,6 +54,9 @@ public class ServerRecordEntity extends Model<ServerRecordEntity> {
     @TableField("is_del")
     private Boolean isDel;
 
+    @TableField("img_url")
+    private String imgUrl;
+
 
     @Override
     protected Serializable pkVal() {

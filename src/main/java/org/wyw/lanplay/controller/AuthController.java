@@ -16,7 +16,6 @@ import org.wyw.lanplay.entity.UserRecordEntity;
 import org.wyw.lanplay.service.CommonService;
 import org.wyw.lanplay.service.InvitationCodeService;
 import org.wyw.lanplay.service.UserRecordService;
-
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 
@@ -67,14 +66,15 @@ public class AuthController {
                                         @RequestParam("username")String username,
                                         @RequestParam("password")String pwd,
                                         @RequestParam("code")String code,
-                                        @RequestParam("nickname")String nickname){
+                                        @RequestParam("nickname")String nickname,
+                                        @RequestParam("ip")String ip){
         int codeCount = invitationCodeService.count(Wrappers.<InvitationCodeEntity>lambdaQuery()
                 .eq(InvitationCodeEntity::getCode, code));
         if(codeCount > 0){
             UserRecordEntity userRecordEntity = new UserRecordEntity();
             userRecordEntity.setCreateAt(LocalDateTime.now());
             userRecordEntity.setIdentity("USER");
-            userRecordEntity.setIp(request.getRemoteAddr());
+            userRecordEntity.setIp(ip);
             userRecordEntity.setNickname(nickname);
             userRecordEntity.setPassword(commonService.encryptedPwd(username,pwd));
             userRecordEntity.setUsername(username);

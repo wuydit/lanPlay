@@ -60,6 +60,8 @@ public class ApplyServerRecordEntity extends Model<ApplyServerRecordEntity> {
     @TableField("password")
     private String serverPwd;
 
+    @TableField("img_url")
+    private String imgUrl;
 
     @Override
     protected Serializable pkVal() {

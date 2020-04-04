@@ -3,6 +3,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.wyw.lanplay.annotation.LoginAdminRequired;
 import org.wyw.lanplay.annotation.LoginUserRequired;
 import org.wyw.lanplay.aop.Log;
 import org.wyw.lanplay.entity.ApplyServerRecordEntity;
@@ -55,6 +56,16 @@ public class UserController {
         applyServerRecordEntity.setIsPublic(isPub);
         applyServerRecordEntity.setServerPwd(pwd);
         return ResponseEntity.ok(applyServerRecordService.save(applyServerRecordEntity));
+    }
+
+    @Log(desc = "获取用户信息")
+    @GetMapping("user")
+    @ApiOperation("获取用户信息")
+    @LoginUserRequired
+    public ResponseEntity user(HttpServletRequest request){
+        UserRecordEntity userRecordEntity = commonService.verifyUser(request.getHeader("token"));
+        userRecordEntity.setPassword("");
+        return ResponseEntity.ok(userRecordEntity);
     }
 
 
