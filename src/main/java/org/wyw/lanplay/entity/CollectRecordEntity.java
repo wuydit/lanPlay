@@ -19,46 +19,31 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author wuYd
- * @since 2020-03-24
+ * @since 2020-04-04
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("user_record")
-@ApiModel(value="UserRecordEntity对象", description="")
-public class UserRecordEntity extends Model<UserRecordEntity> {
+@TableName("collect_record")
+@ApiModel(value="CollectRecordEntity对象", description="")
+public class CollectRecordEntity extends Model<CollectRecordEntity> {
 
     private static final long serialVersionUID=1L;
 
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    @TableField("identity")
-    private String identity;
+    @TableField("server_id")
+    private Long serverId;
 
-    @TableField("username")
-    private String username;
-
-    /**
-     * 存为加密后密码
-     */
-    @TableField("password")
-    private String password;
-
-    @TableField("nickname")
-    private String nickname;
-
-    @TableField("ip")
-    private String ip;
+    @TableField("user_id")
+    private Long userId;
 
     @TableField("createAt")
     private LocalDateTime createAt;
 
-    @TableField("status")
-    private Integer status;
-
-    @TableField("url")
-    private String url;
+    @TableField("is_del")
+    private Boolean isDel;
 
 
     @Override
