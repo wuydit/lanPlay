@@ -10,6 +10,4 @@ public class MsgDTO implements Serializable {
     private Long serverId;
 
     private String msg;
-
-    private String token;
 }

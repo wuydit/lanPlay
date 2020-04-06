@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.user.SimpSession;
 import org.springframework.stereotype.Controller;
 import org.wyw.lanplay.dto.*;
 import org.wyw.lanplay.entity.CollectRecordEntity;
@@ -15,6 +16,7 @@ import org.wyw.lanplay.service.CollectRecordService;
 import org.wyw.lanplay.service.CommonService;
 import org.wyw.lanplay.service.ServerRecordService;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 
 @Slf4j
@@ -25,29 +27,19 @@ public class RoomController {
 
     private CollectRecordService collectRecordService;
 
-    private CommonService commonService;
-
     private ServerRecordService serverRecordService;
 
 
     public RoomController(SimpMessagingTemplate simpMessagingTemplate,
                           CollectRecordService collectRecordService,
-                          CommonService commonService,
                           ServerRecordService serverRecordService) {
         this.simpMessagingTemplate = simpMessagingTemplate;
         this.collectRecordService = collectRecordService;
-        this.commonService = commonService;
         this.serverRecordService = serverRecordService;
     }
 
     @MessageMapping("send.roomMsg")
-    public void handle(MsgDTO msg) {
-        UserRecordEntity userRecordEntity = commonService.verifyUser(msg.getToken());
-        if(userRecordEntity == null ){
-            log.info("未验证的用户，禁止发消息");
-            return;
-        }
-        log.info(msg.toString());
+    public void handle(MsgDTO msg, UserRecordEntity userRecordEntity) {
         int count = collectRecordService.count(Wrappers.<CollectRecordEntity>lambdaQuery()
                 .eq(CollectRecordEntity::getServerId, msg.getServerId())
                 .eq(CollectRecordEntity::getUserId, userRecordEntity.getId())
@@ -55,19 +47,15 @@ public class RoomController {
         if(count > 0 ){
             simpMessagingTemplate.convertAndSendToUser(
                     String.valueOf(msg.getServerId()),"/room/roomMsg",
-                    new SendMsgDTO(userRecordEntity.getNickname(), msg.getMsg()));
+                    new SendMsgDTO(
+                            userRecordEntity.getName(),
+                            userRecordEntity.getUrl(),
+                            msg.getMsg()));
         }
     }
 
     @MessageMapping("ctl")
-    public void handle(String msg) {
-        String token = JSON.parseObject(msg).getString("token");
-        UserRecordEntity userRecordEntity = commonService.verifyUser(token);
-        if(userRecordEntity == null ){
-            log.info("未验证的用户，禁止发消息");
-            return;
-        }
-
+    public void handle(String msg, UserRecordEntity userRecordEntity) {
         String type = JSON.parseObject(msg).getString("type");
         if(StringUtils.equals(type, "join")){
             JoinServerDTO joinServerDTO = JSON.parseObject(msg, JoinServerDTO.class);

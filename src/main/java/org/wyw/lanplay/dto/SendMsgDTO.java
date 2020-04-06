@@ -11,5 +11,7 @@ public class SendMsgDTO implements Serializable {
 
     private String user;
 
+    private String userUrl;
+
     private String msg;
 }

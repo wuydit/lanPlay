@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.baomidou.mybatisplus.annotation.TableId;
+
+import java.security.Principal;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
@@ -26,7 +28,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @TableName("user_record")
 @ApiModel(value="UserRecordEntity对象", description="")
-public class UserRecordEntity extends Model<UserRecordEntity> {
+public class UserRecordEntity extends Model<UserRecordEntity> implements Principal {
 
     private static final long serialVersionUID=1L;
 
@@ -66,4 +68,8 @@ public class UserRecordEntity extends Model<UserRecordEntity> {
         return this.id;
     }
 
+    @Override
+    public String getName() {
+        return this.username;
+    }
 }
