@@ -38,22 +38,22 @@ public class ApplyServerRecordController {
         this.applyServerRecordService = applyServerRecordService;
     }
 
-    @Log(desc = "申请服务器列表")
-    @GetMapping("applyServer")
-    @ApiOperation("申请服务器列表")
-    @LoginAdminRequired
-    public ResponseEntity<List<ApplyServerRecordEntity>> list(){
-        return ResponseEntity.ok(applyServerRecordService.list());
-    }
+//    @Log(desc = "申请服务器列表")
+//    @GetMapping("applyServer")
+//    @ApiOperation("申请服务器列表")
+//    @LoginAdminRequired
+//    public ResponseEntity<List<ApplyServerRecordEntity>> list(){
+//        return ResponseEntity.ok(applyServerRecordService.list());
+//    }
 
-    @Log(desc = "申请服务器分页")
-    @GetMapping("applyServerPage")
-    @ApiOperation("申请服务器分页")
-    @LoginAdminRequired
-    public ResponseEntity<Page<ApplyServerRecordEntity>> page(@RequestParam(value = "size", defaultValue = "20") Integer size,
-                                                              @RequestParam(value = "current", defaultValue = "1") Integer current){
-        return ResponseEntity.ok(applyServerRecordService.page(new Page<>(current, size)));
-    }
+//    @Log(desc = "申请服务器分页")
+//    @GetMapping("applyServerPage")
+//    @ApiOperation("申请服务器分页")
+//    @LoginAdminRequired
+//    public ResponseEntity<Page<ApplyServerRecordEntity>> page(@RequestParam(value = "size", defaultValue = "20") Integer size,
+//                                                              @RequestParam(value = "current", defaultValue = "1") Integer current){
+//        return ResponseEntity.ok(applyServerRecordService.page(new Page<>(current, size)));
+//    }
 
     @Log(desc = "申请服务器")
     @PostMapping("applyServer")
@@ -63,29 +63,29 @@ public class ApplyServerRecordController {
         return ResponseEntity.ok(new BaseEntity<>(applyServerRecordService.save(applyServerRecordEntity)));
     }
 
-    @Log(desc = "申请服务器")
-    @PutMapping("applyServer")
-    @ApiOperation("申请服务器")
-    @LoginAdminRequired
-    public ResponseEntity updateServer(@RequestBody ApplyServerRecordEntity applyServerRecordEntity){
-        return ResponseEntity.ok(applyServerRecordService.updateById(applyServerRecordEntity));
-    }
+//    @Log(desc = "申请服务器")
+//    @PutMapping("applyServer")
+//    @ApiOperation("申请服务器")
+//    @LoginAdminRequired
+//    public ResponseEntity updateServer(@RequestBody ApplyServerRecordEntity applyServerRecordEntity){
+//        return ResponseEntity.ok(applyServerRecordService.updateById(applyServerRecordEntity));
+//    }
 
-    @Log(desc = "申请服务器")
-    @GetMapping("applyServer/{id}")
-    @ApiOperation("申请服务器")
-    @LoginAdminRequired
-    public ResponseEntity applyServer(@PathVariable("id") Long id){
-        return ResponseEntity.ok(applyServerRecordService.getById(id));
-    }
+//    @Log(desc = "申请服务器")
+//    @GetMapping("applyServer/{id}")
+//    @ApiOperation("申请服务器")
+//    @LoginAdminRequired
+//    public ResponseEntity applyServer(@PathVariable("id") Long id){
+//        return ResponseEntity.ok(applyServerRecordService.getById(id));
+//    }
 
-    @Log(desc = "申请服务器删除")
-    @DeleteMapping("applyServer/{id}")
-    @ApiOperation("申请服务器删除")
-    @LoginAdminRequired
-    public ResponseEntity deleteApplyServer(@PathVariable("id") Long id){
-        return ResponseEntity.ok(applyServerRecordService.removeById(id));
-    }
+//    @Log(desc = "申请服务器删除")
+//    @DeleteMapping("applyServer/{id}")
+//    @ApiOperation("申请服务器删除")
+//    @LoginAdminRequired
+//    public ResponseEntity deleteApplyServer(@PathVariable("id") Long id){
+//        return ResponseEntity.ok(applyServerRecordService.removeById(id));
+//    }
 
 }
 

@@ -57,6 +57,11 @@ public class ServerRecordEntity extends Model<ServerRecordEntity> {
     @TableField("img_url")
     private String imgUrl;
 
+    @TableField("password")
+    private String password;
+
+    @TableField("is_public")
+    private Boolean isPub;
 
     @Override
     protected Serializable pkVal() {
